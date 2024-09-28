@@ -144,6 +144,7 @@ MonoBehaviour:
   FrontPlane: {fileID: 8607718620025602511}
   revealed: 0
   rotationSpeed: 7.5
+  materialId: 5
 --- !u!1 &8607718621207004932
 GameObject:
   m_ObjectHideFlags: 0
