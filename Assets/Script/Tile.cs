@@ -11,6 +11,8 @@ public class Tile : MonoBehaviour
     private GameManager gm;
     private Quaternion targetRotation;
 
+    public int materialId;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,25 +25,32 @@ public class Tile : MonoBehaviour
         
     }
 
-    public void SetMaterial(Material mat)
+    public void SetMaterial(Material mat, int matId)
     {
         FrontPlane.material = mat;
+        materialId = matId;
     }
 
-    public IEnumerator Clicked()
+    public IEnumerator Turn()
     {
         gm.isRevealing = true;
+
         if (revealed)
         {
             targetRotation = Quaternion.Euler(0, 0, 180);
+            gameObject.layer = LayerMask.NameToLayer("Ignore Raycast");
         }
         
         if (!revealed)
         {
             targetRotation = Quaternion.Euler(0, 0, 0);
+            gameObject.layer = LayerMask.NameToLayer("Default");
         }
 
+        revealed = !revealed;
+
         float step = 0f;
+
         while (transform.rotation != targetRotation)
         {
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, step);
@@ -50,7 +59,7 @@ public class Tile : MonoBehaviour
             yield return null;
         }
 
-        revealed = !revealed;
         gm.isRevealing = false;
+        gm.CheckCorrectness();
     }
 }
