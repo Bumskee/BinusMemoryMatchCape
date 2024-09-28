@@ -4,19 +4,26 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+    // initialization purposes
     public GameObject tilePrefab;
     public Material[] materials;
     public Transform[] tilesPosition;
 
+    // stores the gameObject (needed later for destroying when restarting the game)
     private GameObject[] tileGameObjects = new GameObject[12];
 
-    public Transform testPos;
+    // stores the state of the game
+    private enum clickStates { IDLE, FIRSTCLICKED};
+    private clickStates clickState = clickStates.IDLE;
+    private Tile firstSelected = null;
+    private Tile secondSelected = null;
+
+    // referenced in another script 
+    public bool isRevealing = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log(tileGameObjects.Length);
         SpawnTiles();
     }
 
@@ -27,6 +34,35 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             SpawnTiles();
+        }
+
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            ClickTile();
+        }
+    }
+
+    void ClickTile()
+    {
+        // if any card is in the process of revealing do nothing
+        if (isRevealing)
+        {
+            return;
+        }
+
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        // checks if the raycast hit something in the world
+        if (Physics.Raycast(ray, out hit))
+        {
+            // check if the hit object tag is a CardTile
+            if (hit.transform.CompareTag("CardTile"))
+            {
+                // adjust the position and rotation
+                StartCoroutine(hit.transform.GetComponentInParent<Tile>().Clicked());
+            }
+
         }
     }
 
@@ -50,7 +86,7 @@ public class GameManager : MonoBehaviour
             GameObject newObject = tilePrefab;
             int matIndex = (int)Mathf.Floor(i / 2);
             newObject.GetComponent<Tile>().SetMaterial(materials[matIndex]);
-            tileGameObjects[i] = Instantiate(newObject, tilesPosition[i].position, Quaternion.identity);
+            tileGameObjects[i] = Instantiate(newObject, tilesPosition[i].position, Quaternion.Euler(0, 0, 180));
         }
     }
 

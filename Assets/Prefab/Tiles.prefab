@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8607718620025602508}
   m_Layer: 0
   m_Name: FrontPlane
-  m_TagString: Untagged
+  m_TagString: CardTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -142,6 +142,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FrontPlane: {fileID: 8607718620025602511}
+  revealed: 0
+  rotationSpeed: 7.5
 --- !u!1 &8607718621207004932
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,7 +158,7 @@ GameObject:
   - component: {fileID: 8607718621207004934}
   m_Layer: 0
   m_Name: BackPlane
-  m_TagString: Untagged
+  m_TagString: CardTile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
