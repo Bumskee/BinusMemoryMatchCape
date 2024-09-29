@@ -33,7 +33,7 @@ public class Tile : MonoBehaviour
 
     public IEnumerator Turn()
     {
-        gm.isRevealing = true;
+        gm.disableControl = true;
 
         if (revealed)
         {
@@ -59,7 +59,7 @@ public class Tile : MonoBehaviour
             yield return null;
         }
 
-        gm.isRevealing = false;
+        gm.disableControl = false;
         gm.CheckCorrectness();
     }
 }

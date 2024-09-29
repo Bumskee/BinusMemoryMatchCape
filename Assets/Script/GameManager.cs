@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour
     private bool gameFinished = false;
 
     // referenced in another script 
-    public bool isRevealing = false;
+    public bool disableControl = false;
 
     // timer
     public float maxTime;
@@ -84,26 +84,22 @@ public class GameManager : MonoBehaviour
             {
                 correct++;
                 ChangeLayer(secondSelected.transform.parent.gameObject, "Ignore Raycast");
+                // set both to null again
+                firstSelected = secondSelected = null;
             }
 
             // if not correct
             else
             {
-                StartCoroutine(firstSelected.GetComponentInParent<Tile>().Turn());
-                StartCoroutine(secondSelected.GetComponentInParent<Tile>().Turn());
-                ChangeLayer(firstSelected.transform.parent.gameObject, "Default");
-                ChangeLayer(secondSelected.transform.parent.gameObject, "Default");
+                StartCoroutine(ResetSelectedTiles());
             }
-
-            // set both to null again
-            firstSelected = secondSelected = null;
         }
     }
 
     void ClickTile()
     {
         // if any card is in the process of revealing do nothing
-        if (isRevealing)
+        if (disableControl)
         {
             return;
         }
@@ -172,5 +168,19 @@ public class GameManager : MonoBehaviour
             arr[i] = arr[j];
             arr[j] = temp;
         }
+    }
+
+    IEnumerator ResetSelectedTiles()
+    {
+        disableControl = true;
+        yield return new WaitForSeconds(0.5f);
+        StartCoroutine(firstSelected.GetComponentInParent<Tile>().Turn());
+        StartCoroutine(secondSelected.GetComponentInParent<Tile>().Turn());
+        ChangeLayer(firstSelected.transform.parent.gameObject, "Default");
+        ChangeLayer(secondSelected.transform.parent.gameObject, "Default");
+
+        // set both to null again
+        firstSelected = secondSelected = null;
+        disableControl = false;
     }
 }
